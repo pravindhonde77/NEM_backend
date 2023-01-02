@@ -28,11 +28,18 @@ const server = http.createServer((request, response) => {
         })
         console.log(str);
         response.end("Data has been enterded")
+
+
+
+
     } 
 
     else if (request.url === "/reports") {
         response.setHeader("Content-type","text/html")
+        
         response.end("<h2>Reports will be here</h2>")
+
+
     }
     else{
         response.end("Invalid ENd Point")
