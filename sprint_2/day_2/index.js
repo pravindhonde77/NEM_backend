@@ -1,14 +1,17 @@
 const express = require("express")
 const app = express()
 const fs = require("fs")
-const {timelogger}=require("./middlewares/timeLogger.middleware")
-const {watchman}=require("./middlewares/watchMan.middleWare")
-
-
+// const {timelogger}=require("./middlewares/timeLogger.middleware")
+// const {watchman}=require("./middlewares/watchMan.middleWare")
+ const {logger}=require("./middlewares/logger.middleware")
+ const {addRoll}=require("./middlewares/addStamp.middleware")
 
 
 //  app.use(watchman)
- app.use(timelogger) 
+//  app.use(timelogger) 
+app.use(express.json())
+app.use(logger)
+app.use(addRoll)
 
 app.get("/", (req, res) => {
     console.log("Welcome page")
@@ -23,6 +26,11 @@ app.get("/contacts", (req, res) => {
 app.get("/about", (req, res) => {
     console.log("about page")
     res.send("About Page")
+})
+
+app.post("/newstudent",(req,res)=>{
+    console.log(req.body)
+    res.send("new student has been added")
 })
 
 

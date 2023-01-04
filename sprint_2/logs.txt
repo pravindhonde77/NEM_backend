@@ -1,0 +1,7 @@
+Route:/ Mrthod:GET
+Route:/data Method:GET
+Route:/newstudent Method:POST
+Route:/newstudent Method:POST
+Route:/newstudent Method:POST
+Route:/newstudent Method:POST
+Route:/ Method:GET
