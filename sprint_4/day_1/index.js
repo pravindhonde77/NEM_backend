@@ -3,8 +3,9 @@ const express = require("express")
 const { connection } = require("./config/db")
 const { UserModel } = require("./models/User.model")
 const jwt = require("jsonwebtoken")
+const bcrypt = require("bcrypt")
 
-//  
+
 
 
 const app = express()
@@ -16,13 +17,24 @@ app.get("/", (req, res) => {
 })
 
 app.post("/register", async (req, res) => {
-    const payload = req.body
+    const { email, pass, name, age } = req.body
     // console.log(payload)
     try {
-        const user = new UserModel(payload)
-        // console.log(user)
-        await user.save()
-        res.send("Registerd")
+
+        bcrypt.hash(pass, 5, async (err, secure_password) => {
+            if (err) {
+                console.log(err);
+            } else {
+                const user = new UserModel({ email,pass:secure_password, name, age })
+                // console.log(user)
+                await user.save()
+                res.send("Registerd")
+
+            }
+        });
+
+
+
 
     } catch (err) {
         res.send("Error in registering the user")
@@ -54,27 +66,27 @@ app.get("/about", (req, res) => {
 })
 
 app.get("/data", (req, res) => {
-    const token=req.headers.authorization;
-    jwt.verify(token, 'masai', (err,decoded)=>{
-        if(err){
+    const token = req.headers.authorization;
+    jwt.verify(token, 'masai', (err, decoded) => {
+        if (err) {
             res.send("Invalid tokens")
             console.log(err)
-        }else{
-            res.send("Data...") 
-        }    
+        } else {
+            res.send("Data...")
+        }
     });
-   
+
 })
 
 app.get("/cart", (req, res) => {
-    const token=req.query.token;
-    jwt.verify(token, 'masai', (err,decoded)=>{
-        if(err){
+    const token = req.query.token;
+    jwt.verify(token, 'masai', (err, decoded) => {
+        if (err) {
             res.send("Invalid tokens")
             console.log(err)
-        }else{
-            res.send("CART PAGE") 
-        }    
+        } else {
+            res.send("CART PAGE")
+        }
     });
 })
 
