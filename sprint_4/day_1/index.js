@@ -25,7 +25,7 @@ app.post("/register", async (req, res) => {
             if (err) {
                 console.log(err);
             } else {
-                const user = new UserModel({ email,pass:secure_password, name, age })
+                const user = new UserModel({ email, pass: secure_password, name, age })
                 // console.log(user)
                 await user.save()
                 res.send("Registerd")
@@ -46,10 +46,23 @@ app.post("/register", async (req, res) => {
 app.post("/login", async (req, res) => {
     const { email, pass } = req.body
     try {
-        const user = await UserModel.find({ email, pass })
-        const token = jwt.sign({ course: 'backend' }, 'masai');
+        const user = await UserModel.find({ email })
+        // console.log(user);
+
+
+
+
         if (user.length > 0) {
-            res.send({ "msg": "Login Successfull", "token": token })
+            bcrypt.compare(pass, user[0].pass, (err, result) => {
+                if (result) {
+                    const token = jwt.sign({ course: 'backend' }, 'masai');
+                    // console.log(token)
+                    res.send({"msg":"Login Successfully","token":token})
+                }else{
+                    res.send("Wrong password")
+                }
+            });
+           
         } else {
             res.send("Wrong credential")
         }
@@ -61,9 +74,7 @@ app.post("/login", async (req, res) => {
 
 })
 
-app.get("/about", (req, res) => {
-    res.send("About page")
-})
+
 
 app.get("/data", (req, res) => {
     const token = req.headers.authorization;
