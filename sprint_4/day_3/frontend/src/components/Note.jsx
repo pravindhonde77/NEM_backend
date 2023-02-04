@@ -18,6 +18,15 @@ const AllNotes = () => {
 
     },[])
 
+    const deleteNote=(noteID)=>{
+        fetch(`http://localhost:8080/notes/delete/${noteID}`,{
+            method:"DELETE",
+            headers:{
+                "Authorization":localStorage.getItem("token")
+            }
+        })
+    }
+
 
 
 
@@ -31,7 +40,7 @@ const AllNotes = () => {
                     <>
                     <h2>Title:{ele.title}</h2>
                     <p>Note:{ele.note}</p>
-                    <button>Delete</button>
+                    <button onClick={()=>deleteNote(ele._id)}>Delete</button>
                     <hr />
                     </>
                 )
